@@ -1,0 +1,16 @@
+image: golang:latest
+
+stages:
+  - test
+  - build
+
+test-job:
+  stage: test
+  allow_failure: false
+  script:
+    - ./build/ci/coverage.sh
+
+build-job:
+  stage: build
+  script:
+    - go build -o bin/payment-server main.go

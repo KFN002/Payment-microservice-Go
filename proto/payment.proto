@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+option go_package = "./internal/payment-service/proto";
+
+package payment;
+
+service PaymentService {
+  rpc CreatePayment (CreatePaymentRequest) returns (CreatePaymentResponse);
+  rpc GetPayment (GetPaymentRequest) returns (GetPaymentResponse);
+  rpc GetPaymentByID (GetPaymentByIDRequest) returns (GetPaymentByIDResponse);
+  rpc RefundPayment (RefundPaymentRequest) returns (RefundPaymentResponse);
+  rpc GetPaymentHistory (GetPaymentHistoryRequest) returns (GetPaymentHistoryResponse);
+  rpc GetPaymentLink (GetPaymentLinkRequest) returns (GetPaymentLinkResponse);
+  rpc GetActivePayments (GetActivePaymentsRequest) returns (GetActivePaymentsResponse);
+}
+
+message GetActivePaymentsRequest {
+  string user_id = 1;
+}
+
+message GetActivePaymentsResponse {
+  repeated Payment payments = 1;
+}
+
+message GetPaymentLinkRequest {
+  string payment_id = 1;
+}
+
+message GetPaymentLinkResponse {
+  string payment_link = 1;
+}
+
+message CreatePaymentRequest {
+  string from_user_id = 1;
+  string to_user_id = 2;
+  float amount = 3;
+  string currency = 4;
+}
+
+message CreatePaymentResponse {
+  string payment_id = 1;
+}
+
+message GetPaymentRequest {
+  string payment_id = 1;
+}
+
+message GetPaymentResponse {
+  string status = 1;
+}
+
+message GetPaymentByIDRequest {
+  string payment_id = 1;
+}
+
+message GetPaymentByIDResponse {
+  string id = 1;
+  string from_user_id = 2;
+  string to_user_id = 3;
+  float amount = 4;
+  string currency = 5;
+  string status = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message RefundPaymentRequest {
+  string payment_id = 1;
+}
+
+message RefundPaymentResponse {
+  string status = 1;
+}
+
+message GetPaymentHistoryRequest {
+  string from_user_id = 1;
+  int32 page = 2;
+  int32 limit = 3;
+}
+
+message GetPaymentHistoryResponse {
+  repeated Payment payment = 1;
+}
+
+message Payment {
+  string id = 1;
+  string from_user_id = 2;
+  string to_user_id = 3;
+  float amount = 4;
+  string currency = 5;
+  string status = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}

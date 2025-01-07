@@ -1,0 +1,54 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile
+    container_name: payment-app
+    ports:
+      - "${SERVER_PORT?}:${SERVER_PORT?}"
+    environment:
+      - CONFIG_PATH=environment
+      - SERVER_PORT=${SERVER_PORT?}
+      - POSTGRES_HOST=${POSTGRES_HOST?}
+      - POSTGRES_PORT=${POSTGRES_PORT?}
+      - POSTGRES_SSL_MODE=${POSTGRES_SSL_MODE?}
+      - POSTGRES_DB=${POSTGRES_DB?}
+      - POSTGRES_USER=${POSTGRES_USER?}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?}
+      - REDIS_URL=${REDIS_URL?}
+      - FOREX_KEY=${FOREX_KEY?}
+      - YOOMONEY_TOKEN=${YOOMONEY_TOKEN?}
+      - YOOMONEY_CLIENT_ID=${YOOMONEY_CLIENT_ID?}
+      - YOOMONEY_RECEIVER=${YOOMONEY_RECEIVER?}
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - app-network
+
+  redis:
+    image: "redis:latest"
+    container_name: redis
+    networks:
+      - app-network
+
+  postgres:
+    image: "postgres:13"
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER?}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD?}
+      POSTGRES_DB: ${POSTGRES_DB?}
+    ports:
+      - "${POSTGRES_PORT?}:${POSTGRES_PORT?}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
