@@ -92,3 +92,5 @@
 5. Система прочитает файл CRT и добавит его в доступный хранилище корневых сертификатов на вашей машине с Linux.
 
 ---
+
+docker compose -f deployments/docker-compose.yml --env-file configs/local.env up -d
